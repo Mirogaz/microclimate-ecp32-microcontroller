@@ -6,12 +6,12 @@
 void HandshakeServer::begin(
     Config* config,
     Mode* currentMode,
-    const char* id
+    const char* name
 ) {
 
     cfg = config;
     mode = currentMode;
-    deviceId = id;
+    deviceName = name;
 
     server.on(
         "/handshake",
@@ -42,7 +42,7 @@ void HandshakeServer::handleGet() {
 
     JSONVar json;
 
-    json["deviceId"] = deviceId;
+    json["deviceName"] = deviceName;
     json["mac"] = WiFi.macAddress();
     json["ip"] = WiFi.localIP().toString();
 

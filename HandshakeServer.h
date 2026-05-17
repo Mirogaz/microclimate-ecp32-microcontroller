@@ -7,7 +7,7 @@
 
 class HandshakeServer {
   public:
-	void begin(Config* config, Mode* mode, const char* deviceId);
+	void begin(Config* config, Mode* mode, const char* name);
 
 	void tick();
 
@@ -17,7 +17,7 @@ class HandshakeServer {
 	Config* cfg;
 	Mode* mode;
 
-	const char* deviceId;
+	const char* deviceName;
 
 	void handleGet();
 	void handlePost();
