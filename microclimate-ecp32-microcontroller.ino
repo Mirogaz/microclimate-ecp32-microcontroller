@@ -10,6 +10,8 @@
 #include "ModeEnum.h"
 #include "WifiPortalUI.h"
 
+#define deviceId "CLIMATRON-V1"
+
 Preferences prefs;
 Config cfg;
 
@@ -139,7 +141,7 @@ void setup() {
 
 		mode = MODE_HANDSHAKE;
 
-		handshake.begin(&cfg, &mode, MDNS_HOSTNAME);
+		handshake.begin(&cfg, &mode, deviceId);
 
 		startMdns();
 
