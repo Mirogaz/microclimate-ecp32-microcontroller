@@ -4,6 +4,8 @@
 #include <WiFi.h>
 #include <string.h>
 
+#include "HandshakeServer.h"
+
 #include "Config.h"
 #include "ModeEnum.h"
 #include "WifiPortalUI.h"
@@ -13,6 +15,8 @@ Config cfg;
 
 Mode mode;
 GyverPortal ui;
+
+HandshakeServer handshake;
 
 static const char MDNS_HOSTNAME[] = "microclimate";
 
@@ -131,15 +135,32 @@ void setup() {
 
 	mode = MODE_NORMAL;
 
-	if (!connectWiFi()) {
+	if (connectWiFi()) {
+
+		mode = MODE_HANDSHAKE;
+
+		handshake.begin(&cfg, &mode, MDNS_HOSTNAME);
+
+		startMdns();
+
+	} else {
+
 		mode = MODE_PROVISION;
+
 		startAP();
 		startPortal();
 	}
 }
 
 void loop() {
-	if (mode == MODE_PROVISION) {
+	switch (mode) {
+	case MODE_PROVISION:
 		ui.tick();
+		break;
+	case MODE_HANDSHAKE:
+		handshake.tick();
+		break;
+	case MODE_NORMAL:
+		break;
 	}
 }
