@@ -3,6 +3,8 @@
 #include "src/infrastructure/network/WiFiConnection.h"
 #include "src/infrastructure/storage/ConfigStorage.h"
 
+#define deviceId "CLIMATRON-V1"
+
 void setup() {
 	Serial.begin(AppConstants::SERIAL_BAUD);
 	ConfigStorage::init();
