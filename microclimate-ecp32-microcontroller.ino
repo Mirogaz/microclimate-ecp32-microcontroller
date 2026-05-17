@@ -1,3 +1,4 @@
+#include <ESPmDNS.h>
 #include <GyverPortal.h>
 #include <Preferences.h>
 #include <WiFi.h>
@@ -12,6 +13,21 @@ Config cfg;
 
 Mode mode;
 GyverPortal ui;
+
+static const char MDNS_HOSTNAME[] = "microclimate";
+
+void startMdns() {
+	if (!MDNS.begin(MDNS_HOSTNAME)) {
+		Serial.println("mDNS: start failed");
+		return;
+	}
+
+	MDNS.addService("http", "tcp", 80);
+
+	Serial.print("mDNS: http://");
+	Serial.print(MDNS_HOSTNAME);
+	Serial.println(".local");
+}
 
 void loadConfig() {
 	prefs.begin("wifi", true);
@@ -55,6 +71,7 @@ bool connectWiFi() {
 	if (WiFi.status() == WL_CONNECTED) {
 		Serial.println("\nConnected!");
 		Serial.println(WiFi.localIP());
+		startMdns();
 		return true;
 	}
 
@@ -68,6 +85,7 @@ void startAP() {
 
 	Serial.println("AP started");
 	Serial.println(WiFi.softAPIP());
+	startMdns();
 }
 
 void buildUI() {
