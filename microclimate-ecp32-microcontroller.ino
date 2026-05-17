@@ -24,7 +24,7 @@ void setup() {
 	}
 
 	g_mode = MODE_HANDSHAKE;
-	g_handshake.begin(&g_config, &g_mode, AppConstants::MDNS_HOSTNAME);
+	g_handshake.begin(&g_config, &g_mode, AppConstants::DEVICE_NAME);
 }
 
 void loop() {

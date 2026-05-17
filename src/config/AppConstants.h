@@ -5,7 +5,8 @@
 
 namespace AppConstants {
 
-	inline constexpr char MDNS_HOSTNAME[] = "CLIMATRON-V1";
+    inline constexpr char DEVICE_NAME[] = "CLIMATRON-V1";
+	inline constexpr char MDNS_HOSTNAME[] = "microclimate";
 
 	inline constexpr char AP_SSID[] = "ESP32_SETUP";
 	inline constexpr char AP_PASSWORD[] = "12345678";
