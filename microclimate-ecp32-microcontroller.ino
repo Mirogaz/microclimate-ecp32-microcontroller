@@ -36,6 +36,7 @@ void loop() {
 		g_handshake.tick();
 		break;
 	case MODE_NORMAL:
+		g_handshake.tick();
 		break;
 	}
 }
