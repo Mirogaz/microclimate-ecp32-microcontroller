@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Config.h"
-#include "WifiPortalMarkup.h"
-#include "WifiPortalStyles.h"
+#include "src/config/AppConstants.h"
+#include "src/config/Config.h"
+#include "src/features/provisioning/portal/WifiPortalMarkup.h"
+#include "src/features/provisioning/portal/WifiPortalStyles.h"
+#include <GyverPortal.h>
 
 namespace WifiPortalUI {
 
@@ -57,7 +59,7 @@ namespace WifiPortalUI {
 	static void render(const Config& config, const String& apIp) {
 		WifiPortalStyles::send();
 		sendHeader(apIp);
-		GP.FORM_BEGIN("/save");
+		GP.FORM_BEGIN(AppConstants::PORTAL_FORM_SAVE);
 		sendFormFields(config);
 		GP.FORM_END();
 		WifiPortalMarkup::sendPageEnd();
