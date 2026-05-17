@@ -7,6 +7,9 @@
 
 class HandshakeServer {
   public:
+	HandshakeServer();
+
+  public:
 	void begin(Config* config, Mode* mode, const char* name);
 
 	void tick();
