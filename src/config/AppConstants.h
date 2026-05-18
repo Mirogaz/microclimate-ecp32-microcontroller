@@ -11,7 +11,13 @@ namespace AppConstants {
 	inline constexpr char AP_SSID[] = "ESP32_SETUP";
 	inline constexpr char AP_PASSWORD[] = "12345678";
 
-	inline constexpr char PREFS_NAMESPACE[] = "wifi";
+	inline constexpr char PREFS_NAMESPACE[] = "pref";
+
+	inline constexpr char MQTT_HOST_KEY[] = "mqtt_host";
+	inline constexpr char MQTT_PORT_KEY[] = "mqtt_port";
+	inline constexpr char MQTT_USER_KEY[] = "mqtt_user";
+	inline constexpr char MQTT_PASSWORD_KEY[] = "mqtt_pass";
+
 	inline constexpr char PREFS_KEY_CONFIG[] = "cfg";
 
 	inline constexpr char PORTAL_FORM_SAVE[] = "/save";

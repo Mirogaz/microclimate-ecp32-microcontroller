@@ -1,11 +1,15 @@
 #include "src/app/AppContext.h"
 #include "src/features/provisioning/ProvisionPortal.h"
 #include "src/infrastructure/network/WiFiConnection.h"
+#include "src/infrastructure/storage/ConfigMqttStorage.h"
 #include "src/infrastructure/storage/ConfigStorage.h"
 
 void setup() {
 	Serial.begin(AppConstants::SERIAL_BAUD);
+	// нужна небольшая задержка что бы serial успел стартануть
+	delay(1000);
 	ConfigStorage::init();
+	ConfigMqttStorage::init();
 
 	if (!ConfigStorage::isConfigured()) {
 		g_mode = MODE_PROVISION;
@@ -34,7 +38,7 @@ void loop() {
 		g_handshake.tick();
 		break;
 	case MODE_NORMAL:
-		g_handshake.tick();
+		// g_handshake.tick();
 		break;
 	}
 }

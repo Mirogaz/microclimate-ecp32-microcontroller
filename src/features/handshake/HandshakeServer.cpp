@@ -4,10 +4,10 @@
 #include <WiFi.h>
 
 #include "src/config/AppConstants.h"
-#include "src/config/ConfigMQTT.h"
 #include "src/utils/FieldsJSON.h"
+#include "src/infrastructure/storage/ConfigMqttStorage.h"
+#include "src/app/AppContext.h"
 
-ConfigMQTT configMQTT;
 
 HandshakeServer::HandshakeServer() : server(AppConstants::HTTP_PORT) {}
 
@@ -69,20 +69,22 @@ void HandshakeServer::handlePost() {
 
 	Serial.println("Registration complete");
 
-	configMQTT.mqttHost = static_cast<const char*>(doc["mqttHost"]);
-	configMQTT.mqttPort = static_cast<uint16_t>(static_cast<int>(doc["mqttPort"]));
-	configMQTT.mqttUsername = static_cast<const char*>(doc["mqttUsername"]);
-	configMQTT.mqttPassword = static_cast<const char*>(doc["mqttPassword"]);
+	g_configMqtt.mqttHost = static_cast<const char*>(doc["mqttHost"]);
+	g_configMqtt.mqttPort = static_cast<uint16_t>(static_cast<int>(doc["mqttPort"]));
+	g_configMqtt.mqttUsername = static_cast<const char*>(doc["mqttUsername"]);
+	g_configMqtt.mqttPassword = static_cast<const char*>(doc["mqttPassword"]);
 
 	Serial.println("MQTT config:");
 	Serial.print("  host: ");
-	Serial.println(configMQTT.mqttHost);
+	Serial.println(g_configMqtt.mqttHost);
 	Serial.print("  port: ");
-	Serial.println(configMQTT.mqttPort);
+	Serial.println(g_configMqtt.mqttPort);
 	Serial.print("  username: ");
-	Serial.println(configMQTT.mqttUsername);
+	Serial.println(g_configMqtt.mqttUsername);
 	Serial.print("  password: ");
-	Serial.println(configMQTT.mqttPassword);
+	Serial.println(g_configMqtt.mqttPassword);
+	
+	ConfigMqttStorage::save();
 
 	server.send(200, "application/json", "{\"status\":\"ok\"}");
 }
