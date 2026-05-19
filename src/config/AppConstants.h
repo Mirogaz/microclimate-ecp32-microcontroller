@@ -25,6 +25,7 @@ namespace AppConstants {
 
 	inline constexpr size_t SSID_MAX_LEN = 32;
 	inline constexpr size_t PASSWORD_MAX_LEN = 64;
+	inline constexpr size_t UUID_MAX_LEN = 36;
 
 	inline constexpr int WIFI_CONNECT_MAX_TRIES = 20;
 	inline constexpr uint32_t WIFI_RETRY_DELAY_MS = 500;

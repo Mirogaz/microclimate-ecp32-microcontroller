@@ -3,11 +3,10 @@
 #include <Arduino_JSON.h>
 #include <WiFi.h>
 
-#include "src/config/AppConstants.h"
-#include "src/utils/FieldsJSON.h"
-#include "src/infrastructure/storage/ConfigMqttStorage.h"
 #include "src/app/AppContext.h"
-
+#include "src/config/AppConstants.h"
+#include "src/infrastructure/storage/ConfigMqttStorage.h"
+#include "src/utils/FieldsJSON.h"
 
 HandshakeServer::HandshakeServer() : server(AppConstants::HTTP_PORT) {}
 
@@ -55,17 +54,20 @@ void HandshakeServer::handlePost() {
 		return;
 	}
 
+	bool hasDeviceId = FieldsJSON::hasNonEmptyString(doc, "deviceId");
 	bool hasMqttHost = FieldsJSON::hasNonEmptyString(doc, "mqttHost");
 	bool hasMqttUsername = FieldsJSON::hasNonEmptyString(doc, "mqttUsername");
 	bool hasMqttPassword = FieldsJSON::hasNonEmptyString(doc, "mqttPassword");
 	bool hasMqttPort = FieldsJSON::hasNonEmptyNumber(doc, "mqttPort");
 
-	if (!hasMqttHost || !hasMqttUsername || !hasMqttPassword || !hasMqttPort) {
-		server.send(400, "application/json",
-		            "{\"status\":\"error\",\"message\":\"Required: mqttHost, mqttUsername, mqttPassword (non-empty "
-		            "strings), mqttPort (1-65535)\"}");
+	bool hasAllFields = hasDeviceId && hasMqttHost && hasMqttUsername && hasMqttPassword && hasMqttPort;
+
+	if (!hasAllFields) {
+		server.send(400, "application/json", "{\"status\":\"error\",\"message\":\"Required: deviceId, mqttHost, mqttUsername, mqttPassword, mqttPort\"}");
 		return;
 	}
+
+	g_config.deviceId = static_cast<const char*>(doc["deviceId"]);
 
 	Serial.println("Registration complete");
 
@@ -75,6 +77,8 @@ void HandshakeServer::handlePost() {
 	g_configMqtt.mqttPassword = static_cast<const char*>(doc["mqttPassword"]);
 
 	Serial.println("MQTT config:");
+	Serial.print("  deviceId: ");
+	Serial.println(g_config.deviceId);
 	Serial.print("  host: ");
 	Serial.println(g_configMqtt.mqttHost);
 	Serial.print("  port: ");
@@ -83,7 +87,7 @@ void HandshakeServer::handlePost() {
 	Serial.println(g_configMqtt.mqttUsername);
 	Serial.print("  password: ");
 	Serial.println(g_configMqtt.mqttPassword);
-	
+
 	ConfigMqttStorage::save();
 
 	server.send(200, "application/json", "{\"status\":\"ok\"}");
