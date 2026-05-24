@@ -6,6 +6,7 @@
 #include "src/app/AppContext.h"
 #include "src/config/AppConstants.h"
 #include "src/infrastructure/storage/ConfigMqttStorage.h"
+#include "src/infrastructure/storage/ConfigStorage.h"
 #include "src/utils/FieldsJSON.h"
 
 HandshakeServer::HandshakeServer() : server(AppConstants::HTTP_PORT) {}
@@ -97,6 +98,8 @@ void HandshakeServer::handlePost() {
 	Serial.println(g_configMqtt.mqttPassword);
 
 	ConfigMqttStorage::save();
+	ConfigStorage::save();
+	ESP.restart();
 
 	server.send(200, "application/json", "{\"status\":\"ok\"}");
 }

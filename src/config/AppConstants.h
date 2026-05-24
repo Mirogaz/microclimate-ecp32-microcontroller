@@ -5,7 +5,7 @@
 
 namespace AppConstants {
 
-	inline constexpr char DEVICE_NAME[] = "CLIMATRON-V1";
+	inline constexpr char DEVICE_NAME[] = "CLIMATRON-V0";
 	inline constexpr char MDNS_HOSTNAME[] = "microclimate";
 
 	inline constexpr char AP_SSID[] = "ESP32_SETUP";
@@ -25,7 +25,7 @@ namespace AppConstants {
 
 	inline constexpr size_t SSID_MAX_LEN = 32;
 	inline constexpr size_t PASSWORD_MAX_LEN = 64;
-	inline constexpr size_t UUID_MAX_LEN = 36;
+	inline constexpr size_t UUID_MAX_LEN = 64;
 
 	inline constexpr int WIFI_CONNECT_MAX_TRIES = 20;
 	inline constexpr uint32_t WIFI_RETRY_DELAY_MS = 500;
@@ -34,5 +34,7 @@ namespace AppConstants {
 	inline constexpr size_t PORTAL_BUFFER_SIZE = 4096;
 	inline constexpr uint16_t HTTP_PORT = 80;
 	inline constexpr uint32_t REBOOT_DELAY_MS = 1000;
+
+	inline constexpr int oneWireBus = 22;
 
 } // namespace AppConstants

@@ -6,3 +6,6 @@ ConfigMQTT g_configMqtt;
 Mode g_mode = MODE_PROVISION;
 GyverPortal g_portal;
 HandshakeServer g_handshake;
+
+WiFiClientSecure g_wifiClient;
+PubSubClient g_mqttClient(g_wifiClient);

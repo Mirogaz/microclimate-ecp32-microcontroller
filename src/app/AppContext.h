@@ -2,6 +2,9 @@
 
 #include <GyverPortal.h>
 #include <Preferences.h>
+#include <WiFiClientSecure.h>
+#include <PubSubClient.h>
+#include <OneWire.h>
 
 #include "src/config/Config.h"
 #include "src/config/ConfigMQTT.h"
@@ -14,3 +17,5 @@ extern ConfigMQTT g_configMqtt;
 extern Mode g_mode;
 extern GyverPortal g_portal;
 extern HandshakeServer g_handshake;
+extern WiFiClientSecure g_wifiClient;
+extern PubSubClient g_mqttClient;
