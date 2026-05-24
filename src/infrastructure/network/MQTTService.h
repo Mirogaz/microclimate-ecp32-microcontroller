@@ -10,6 +10,8 @@ namespace MQTTService {
 
 	void publishTemperature(float value);
 
-	void publishFan(uint8_t speed, uint32_t rpm);
+	void publishFan(uint32_t rpm);
+
+	void mqttCallback(char* topic, byte* payload, unsigned int length);
 
 } 

@@ -68,38 +68,25 @@ void loop() {
 		break;
 	case MODE_NORMAL:
 		MQTTService::tick();
-		static uint8_t speed = 0;
-		static uint32_t lastTelemetry = 0;
-		static uint32_t lastFanUpdate = 0;
 
-		// 1. температура
+		static uint32_t lastTelemetry = 0;
 		if (millis() - lastTelemetry > AppConstants::MQTT_DELAY) {
 			float temp = TemperatureService::read();
 			MQTTService::publishTemperature(temp);
 			lastTelemetry = millis();
 		}
-		
-		// 2. вентилятор + RPM + MQTT
-		if (millis() - lastFanUpdate > AppConstants::MQTT_DELAY) {
 
-			FanService::setSpeed(speed);
+		static uint32_t lastFanTelemetry = 0;
+		if (millis() - lastFanTelemetry > AppConstants::MQTT_DELAY) {
 
 			uint32_t rpm = FanService::getRPM();
 
-			Serial.print("current speed: ");
-			Serial.println(speed);
-
-			Serial.print("current rpm: ");
+			Serial.print("rpm: ");
 			Serial.println(rpm);
 
-			MQTTService::publishFan(speed, rpm);
+			MQTTService::publishFan(rpm);
 
-			// speed += 25;
-			if (speed > 100) {
-				speed = 0;
-			}
-
-			lastFanUpdate = millis();
+			lastFanTelemetry = millis();
 		}
 
 		break;

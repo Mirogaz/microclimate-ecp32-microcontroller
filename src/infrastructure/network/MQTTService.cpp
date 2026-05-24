@@ -4,6 +4,7 @@
 namespace MQTTService {
 
 	static uint32_t lastReconnectAttempt = 0;
+	static uint8_t speed = 0;
 
 	void begin() {
 
@@ -27,6 +28,8 @@ namespace MQTTService {
 			g_configMqtt.mqttHost.c_str(),
 			g_configMqtt.mqttPort
 		);
+
+		g_mqttClient.setCallback(mqttCallback);
 	}
 
 	bool connected() {
@@ -57,7 +60,16 @@ namespace MQTTService {
 			return;
 		}
 
-		Serial.println("MQTT connected");
+		if (ok) {
+			Serial.println("MQTT connected");
+			String topic =
+				String("devices/") +
+				g_config.deviceId +
+				"/fan/set";
+
+			g_mqttClient.subscribe(topic.c_str());
+		}
+
 	}
 
 	void tick() {
@@ -93,7 +105,7 @@ namespace MQTTService {
 		Serial.println(payload);
 	}
 
-	void publishFan(uint8_t speed, uint32_t rpm) {
+	void publishFan(uint32_t rpm) {
 
 		if (!connected()) return;
 
@@ -110,5 +122,22 @@ namespace MQTTService {
 			"}";
 
 		g_mqttClient.publish(topic.c_str(), payload.c_str(), true);
+	}
+
+	void mqttCallback(char* topic, byte* payload, unsigned int length) {
+
+		String msg;
+
+		for (unsigned int i = 0; i < length; i++) {
+			msg += (char)payload[i];
+		}
+
+		int value = msg.toInt();
+		value = constrain(value, 0, 100);
+
+		FanService::setSpeed(value);
+
+		Serial.print("MQTT fan speed set: ");
+		Serial.println(value);
 	}
 }

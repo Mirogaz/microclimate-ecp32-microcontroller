@@ -55,16 +55,14 @@ namespace FanService {
     }
 
     void setSpeed(uint8_t percent) {
+        static uint8_t last = 255;
+        if (percent == last) return;
+        last = percent;
 
         percent = constrain(percent, 0, 100);
 
-        uint32_t duty =
-            map(percent, 0, 100, 0, 255);
-
-        ledcWrite(
-            AppConstants::FAN_PWM_PIN,
-            duty
-        );
+        uint32_t duty = map(percent, 0, 100, 0, 255);
+        ledcWrite(AppConstants::FAN_PWM_PIN, duty);
     }
 
     uint32_t getRPM() {
