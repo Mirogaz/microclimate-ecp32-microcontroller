@@ -24,9 +24,15 @@ void setup() {
 		ProvisionPortal::start();
 		return;
 	}
+	// TODO: добавить сюда проверку на попытку соединения с mqtt
+	if (!ConfigMqttStorage::isConfigured()) {
+		g_mode = MODE_HANDSHAKE;
+		g_handshake.begin(&g_config, &g_mode, AppConstants::DEVICE_NAME);
+	}
 
-	g_mode = MODE_HANDSHAKE;
-	g_handshake.begin(&g_config, &g_mode, AppConstants::DEVICE_NAME);
+	if (ConfigMqttStorage::isConfigured() && ConfigStorage::isConfigured()) {
+		g_mode = MODE_NORMAL;
+	}
 }
 
 void loop() {

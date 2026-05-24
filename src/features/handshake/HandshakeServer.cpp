@@ -67,7 +67,14 @@ void HandshakeServer::handlePost() {
 		return;
 	}
 
-	g_config.deviceId = static_cast<const char*>(doc["deviceId"]);
+	strncpy(
+		g_config.deviceId,
+		static_cast<const char*>(doc["deviceId"]),
+		sizeof(g_config.deviceId) - 1
+	);
+
+	g_config.deviceId[sizeof(g_config.deviceId) - 1] = '\0';
+	
 
 	Serial.println("Registration complete");
 
@@ -75,6 +82,7 @@ void HandshakeServer::handlePost() {
 	g_configMqtt.mqttPort = static_cast<uint16_t>(static_cast<int>(doc["mqttPort"]));
 	g_configMqtt.mqttUsername = static_cast<const char*>(doc["mqttUsername"]);
 	g_configMqtt.mqttPassword = static_cast<const char*>(doc["mqttPassword"]);
+	g_mode = MODE_NORMAL;
 
 	Serial.println("MQTT config:");
 	Serial.print("  deviceId: ");
