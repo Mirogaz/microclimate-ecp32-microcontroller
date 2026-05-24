@@ -92,4 +92,23 @@ namespace MQTTService {
 		Serial.print("Published: ");
 		Serial.println(payload);
 	}
+
+	void publishFan(uint8_t speed, uint32_t rpm) {
+
+		if (!connected()) return;
+
+		String topic =
+			String("devices/") +
+			g_config.deviceId +
+			"/fan";
+
+		String payload =
+			String("{\"speed\":") +
+			speed +
+			",\"rpm\":" +
+			rpm +
+			"}";
+
+		g_mqttClient.publish(topic.c_str(), payload.c_str(), true);
+	}
 }

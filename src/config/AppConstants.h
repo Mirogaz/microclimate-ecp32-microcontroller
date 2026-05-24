@@ -34,7 +34,7 @@ namespace AppConstants {
 	inline constexpr size_t PORTAL_BUFFER_SIZE = 4096;
 	inline constexpr uint16_t HTTP_PORT = 80;
 	inline constexpr uint32_t REBOOT_DELAY_MS = 1000;
-	inline constexpr int TELEMETRY_DELAY = 5000;
+	inline constexpr int MQTT_DELAY = 5000;
 
 	inline constexpr int oneWireBus = 22;
 
