@@ -43,4 +43,7 @@ namespace AppConstants {
 	inline constexpr uint32_t FAN_PWM_FREQ = 25000;
 	inline constexpr uint8_t FAN_PWM_RESOLUTION = 8;
 
+	// TODO: вынести в конфиг. сделать возможным устанавливать значение "пульсы за оборот"
+	constexpr uint8_t PULSES_PER_REV = 2;
+
 } // namespace AppConstants

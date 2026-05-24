@@ -7,23 +7,21 @@
 namespace {
 
     volatile uint32_t pulseCount = 0;
-    volatile uint32_t lastPulseUs = 0;
 
     uint32_t lastRPM = 0;
     uint32_t lastMeasure = 0;
 
     void IRAM_ATTR onTach() {
 
-        uint32_t now = micros();
+    uint32_t now = micros();
 
-        // антидребезг (реально это не дребезг, а фильтр импульсов)
-        if (now - lastPulseUs < 2000) {
-            return;
-        }
+    static uint32_t last = 0;
 
-        pulseCount++;
-        lastPulseUs = now;
-    }
+    if (now - last < 3000) return;  // 3ms минимум
+
+    pulseCount++;
+    last = now;
+}
 }
 
 namespace FanService {
@@ -66,19 +64,26 @@ namespace FanService {
     }
 
     uint32_t getRPM() {
-        uint32_t pulses;
-        if (millis() - lastMeasure >= 1000) {
+        static uint32_t lastTime = 0;
+        static uint32_t lastRPMLocal = 0;
 
-            noInterrupts();
-            pulses = pulseCount;
-            pulseCount = 0;
-            interrupts();
+        uint32_t now = millis();
+        uint32_t dt = now - lastTime;
 
-            lastRPM = (pulses * 60) / 2;
-
-            lastMeasure = millis();
+        if (dt < 1000) {
+            return lastRPMLocal;
         }
 
-        return lastRPM;
+        noInterrupts();
+        uint32_t pulses = pulseCount;
+        pulseCount = 0;
+        interrupts();
+
+        // RPM = (pulses / PPR) * (60000 / dt)
+        lastRPMLocal = (pulses * 60000UL) / (AppConstants::PULSES_PER_REV * dt);
+
+        lastTime = now;
+
+        return lastRPMLocal;
     }
 }
