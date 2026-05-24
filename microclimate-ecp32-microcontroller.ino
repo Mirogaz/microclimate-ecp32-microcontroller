@@ -73,8 +73,7 @@ void loop() {
 		MQTTService::tick();
 
 		static uint32_t lastTelemetry = 0;
-
-		if (millis() - lastTelemetry > 5000) {
+		if (millis() - lastTelemetry > AppConstants::TELEMETRY_DELAY) {
 
 			float temp = TemperatureService::read();
 

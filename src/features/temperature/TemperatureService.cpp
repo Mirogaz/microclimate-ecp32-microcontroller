@@ -1,21 +1,16 @@
+#include "src/app/AppContext.h"
 #include "src/features/temperature/TemperatureService.h"
 
 namespace TemperatureService {
 
 	void begin() {
+		g_sensors.begin();
 	}
 
 	float read() {
-		// TODO: write reading temperature 
 
-		static float temp = 22.0;
+		g_sensors.requestTemperatures();
 
-		temp += 0.1;
-
-		if (temp > 30) {
-			temp = 22;
-		}
-
-		return temp;
+		return g_sensors.getTempCByIndex(0);
 	}
 }
