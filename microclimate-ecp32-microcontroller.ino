@@ -12,6 +12,7 @@ void setup() {
 	ConfigStorage::init();
 	ConfigMqttStorage::init();
 	TemperatureService::begin();
+	FanService::begin();
 
 	if (!ConfigStorage::isConfigured()) {
 		g_mode = MODE_PROVISION;
@@ -74,12 +75,26 @@ void loop() {
 
 		static uint32_t lastTelemetry = 0;
 		if (millis() - lastTelemetry > AppConstants::TELEMETRY_DELAY) {
-
 			float temp = TemperatureService::read();
-
 			MQTTService::publishTemperature(temp);
-
 			lastTelemetry = millis();
+		}
+
+		static uint32_t lastChange = 0;
+		static uint8_t speed = 0;
+		if (millis() - lastChange > 5000) {
+			// TODO: write getting rpm from broker 
+			Serial.print("current speed:");
+			Serial.println(speed);
+			FanService::setSpeed(speed);
+			// speed += 25;
+			if (speed > 100) {
+				speed = 0;
+			}
+			Serial.print("current rpm: ");
+			Serial.println(FanService::getRPM());
+
+			lastChange = millis();
 		}
 
 		break;

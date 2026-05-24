@@ -11,6 +11,7 @@
 #include "src/config/ConfigMQTT.h"
 #include "src/domain/Mode.h"
 #include "src/features/handshake/HandshakeServer.h"
+#include "src/features/fan/FanService.h"
 
 extern Preferences g_prefs;
 extern Config g_config;

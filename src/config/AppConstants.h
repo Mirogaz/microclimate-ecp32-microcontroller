@@ -38,4 +38,9 @@ namespace AppConstants {
 
 	inline constexpr int oneWireBus = 22;
 
+	inline constexpr uint8_t FAN_PWM_PIN = 18;
+	inline constexpr uint8_t FAN_TACH_PIN = 19;
+	inline constexpr uint32_t FAN_PWM_FREQ = 25000;
+	inline constexpr uint8_t FAN_PWM_RESOLUTION = 8;
+
 } // namespace AppConstants
